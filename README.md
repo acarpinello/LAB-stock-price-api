@@ -28,7 +28,7 @@ The Stock Price API is a RESTful service built with FastAPI that allows users to
 First, clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/your-username/stock-api.git
+git clone https://github.com/acarpinello/LAB-stock-price-api.git
 cd stock-api
 ```
 

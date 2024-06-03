@@ -10,6 +10,7 @@ version_endpoint = os.getenv("VERSION_ENDPOINT")
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+# Set up the FASTAPI app with associated tags, descriptions, doc_url, and routers
 app = FastAPI(
     title="LAB Stock Price API",
     description="Application for delivering stock prices from Alpha Vantage.",
@@ -22,6 +23,7 @@ app = FastAPI(
 )
 
 
+# Set the root path
 @app.get('/', include_in_schema=False)
 async def root():
     return {'message': f'Welcome to the LAB Stock Price API in the {env} environment.'}

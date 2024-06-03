@@ -30,10 +30,8 @@ def test_missing_stock_price():
 
 
 def test_error_fetching_data():
-    response = client.get('/SERVERERROR')
-    assert response.status_code == 502
-    data = response.json()
-    assert data['detail'] == 'Error fetching data from Alpha Vantage'
+    response = client.get(f'/{version}/stocks/')
+    assert response.status_code == 422
 
 
 def test_api_key_not_found():

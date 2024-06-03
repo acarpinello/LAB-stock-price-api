@@ -10,6 +10,7 @@ logger.setLevel(logging.INFO)
 alpha_vantage_url = "https://www.alphavantage.co/query"
 
 
+# Helper function that will make the get call, parse the json response body for the price, and raise HTTP exceptions for bad response/request
 def fetch_stock_price(symbol: str, api_key: str):
     response = requests.get(alpha_vantage_url, params={
         'function': 'GLOBAL_QUOTE',
@@ -22,9 +23,6 @@ def fetch_stock_price(symbol: str, api_key: str):
 
     data = response.json()
     logger.info(f'Response body: {data}')
-
-    if 'Error Message' in data:
-        raise HTTPException(status_code=400, detail='Invalid API call')
 
     if 'Information' in data:
         raise HTTPException(status_code=429, detail='API call frequency limit reached')
@@ -40,6 +38,9 @@ def fetch_stock_price(symbol: str, api_key: str):
 @router.get('/stocks')
 async def get_stocks(ids: str = Query(..., description='List of stock ids prices needed for'),
                      api_key: str = Depends(get_api_key)):
+    """
+    Get Stock Price: Given a list of stock id's and an api key, return a dict of associated stock prices
+    """
     stock_ids = ids.split(',')
     stock_prices = {}
     for stock_id in stock_ids:
@@ -53,6 +54,9 @@ async def get_stocks(ids: str = Query(..., description='List of stock ids prices
 
 @router.get('/stocks/{id}')
 async def get_stock(id: str = Path(..., description='Stock id price needed for'), api_key: str = Depends(get_api_key)):
+    """
+    Get Stock Price: Given a single stock id and api key, return the associated stock price
+    """
     try:
         stock_price = fetch_stock_price(id, api_key)
         return {id: stock_price}
